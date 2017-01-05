@@ -71,7 +71,12 @@ if(!Config.hasOwnProperty("commandPrefix")){
 	Config.commandPrefix = '!';
 }
 
-
+var Counts = {};
+try{
+	Counts = require("./counts.json");
+} catch(e){
+	Counts.counts = {};
+}
 
 var d20 = require("d20");
 
@@ -116,6 +121,16 @@ var commands = {
 		description: "bot says message with text to speech",
 		process: function(bot,msg,suffix){
 			msg.channel.sendMessage(suffix,{tts:true});
+		}
+	},
+	"counts": {
+		description: "lists the current count for all tracked stats",
+		process: function(bot,msg,suffix){
+			var text = "Current counts:\n-------------------\n";
+			for(var c in Counts.counts){
+				text += c + " : " + Counts.counts[c] + "\n";
+			}
+			msg.channel.sendMessage(text);
 		}
 	},
 	"idle": {
