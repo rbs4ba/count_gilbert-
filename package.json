@@ -1,0 +1,14 @@
+{
+  "name": "count_gilbert",
+  "version": "1.0.0",
+  "description": "",
+  "main": "cg_bot.js",
+  "scripts": {
+    "test": "nodejs cg_bot.js"
+  },
+  "author": "Brian",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^11.0.0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+	"global": {
+		"alias": false,
+		"aliases": false		
+	},
+	"users": {
+		"user_id here!":{
+			"alias": true,
+			"aliases": true
+	}
+}

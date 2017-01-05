@@ -1,0 +1,5 @@
+{
+	"bot_token" : "Discord bot token goes here."
+	"client_id" : "Discord client id goes here."
+	// Can use user credentials instead, amongst other things
+}
