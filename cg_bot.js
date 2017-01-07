@@ -163,7 +163,7 @@ var commands = {
 		description: "meow",
 		process: function(bot, msg, suffix){
 			msg.channel.sendMessage("Meow",{tts:true});
-			msg.channel.sendMessage("(*)");
+			msg.channel.sendMessage("ヾ(*ΦωΦ)ﾉ");
 		}
 	},
 	"myid": {
