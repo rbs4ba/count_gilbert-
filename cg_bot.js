@@ -133,6 +133,18 @@ var commands = {
 			msg.channel.sendMessage(text);
 		}
 	},
+	"hunger": {
+		description: "increments the count of 'Im Hungry' by 1",
+		process: function(bot, msg, suffix){
+			var curCnt = Counts.counts["I'm Hungry"];
+			Counts.counts["I'm Hungry"] = curCnt + 1;
+
+			fs.writeFile("./counts.json",JSON.stringify(Counts,null,2));			
+
+			var text = "Adding 1 to the current count for \"I'm Hungry\".\nNew Total: " + (curCnt+1);
+			msg.channel.sendMessage(text);
+		}
+	},
 	"idle": {
 		usage: "[status]",
 		description: "sets bot status to idle",
@@ -145,6 +157,13 @@ var commands = {
 		description: "logs message to bot console",
 		process: function(bot,msg,suffix){
 			console.log(msg.content);
+		}
+	},
+	"meow": {
+		description: "meow",
+		process: function(bot, msg, suffix){
+			msg.channel.sendMessage("Meow",{tts:true});
+			msg.channel.sendMessage("(*)");
 		}
 	},
 	"myid": {
