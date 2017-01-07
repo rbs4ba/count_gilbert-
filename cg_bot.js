@@ -85,7 +85,24 @@ var startTime = Date.now();
 var aliases;
 
 var commands = {
+	"add": {
+		usage: "<phrase to count>",
+		description: "increments the count of <suffix> by 1",
+		process: function(bot, msg, suffix){
+			var curCnt;
+			if (isNaN(parseFloat(Counts.counts[suffix]))){
+				curCnt = 0;
+			} else{
+				curCnt = Counts.counts[suffix];
+			}
+			Counts.counts[suffix] = curCnt + 1;
 
+			fs.writeFile("./counts.json",JSON.stringify(Counts,null,2));
+
+			var text = "Adding 1 to the current count for \"" + suffix + "\".\nNew Total: " + (curCnt+1);
+			msg.channel.sendMessage(text);
+		}
+	},
 	"alias": {
 		usage: "<name> <actual command>",
 		description: "Creates command aliases. Useful for making simple commands on the fly",
@@ -130,18 +147,6 @@ var commands = {
 			for(var c in Counts.counts){
 				text += c + " : " + Counts.counts[c] + "\n";
 			}
-			msg.channel.sendMessage(text);
-		}
-	},
-	"hunger": {
-		description: "increments the count of 'Im Hungry' by 1",
-		process: function(bot, msg, suffix){
-			var curCnt = Counts.counts["I'm Hungry"];
-			Counts.counts["I'm Hungry"] = curCnt + 1;
-
-			fs.writeFile("./counts.json",JSON.stringify(Counts,null,2));			
-
-			var text = "Adding 1 to the current count for \"I'm Hungry\".\nNew Total: " + (curCnt+1);
 			msg.channel.sendMessage(text);
 		}
 	},
@@ -211,7 +216,6 @@ var commands = {
 			}
 		}
 	},
-
 	"say": {
 		usage: "<message>",
 		description: "bot says message",
@@ -270,6 +274,12 @@ var commands = {
 			} else {
 				msg.channel.sendMessage( "The id of " + msg.author + " is " + msg.author.id);
 			}
+		}
+	},
+	"xD": {
+		description: "xD",
+		process: function(bot, msg){
+			msg.channel.sendMessage("Wow, you're like legit bro! xD", {tts:true});
 		}
 	}
 }
@@ -332,20 +342,22 @@ function checkMessageForCommand(msg, isEdit) {
 				var cmds = suffix.split(" ").filter(function(cmd){return commands[cmd]});
 				var info = "";
 				for(var i=0;i<cmds.length;i++) {
-					var cmd = cmds[i];
-					info += "**"+Config.commandPrefix + cmd+"**";
-					var usage = commands[cmd].usage;
-					if(usage){
-						info += " " + usage;
+					if((cmds[i] != "meow") && (cmds[i] != "xD")){
+						var cmd = cmds[i];
+						info += "**"+Config.commandPrefix + cmd+"**";
+						var usage = commands[cmd].usage;
+						if(usage){
+							info += " " + usage;
+						}
+						var description = commands[cmd].description;
+						if(description instanceof Function){
+							description = description();
+						}
+						if(description){
+							info += "\n\t" + description;
+						}
+						info += "\n"
 					}
-					var description = commands[cmd].description;
-					if(description instanceof Function){
-						description = description();
-					}
-					if(description){
-						info += "\n\t" + description;
-					}
-					info += "\n"
 				}
 				msg.channel.sendMessage(info);
 			} else {
@@ -392,7 +404,7 @@ function checkMessageForCommand(msg, isEdit) {
 					msg.channel.sendMessage(msgTxt);
 				}
 			} else {
-				msg.channel.sendMessage("You are not allowed to run " + cmdTxt + "!");
+				msg.channel.sendMessage("You are not allowed to run " + cmdTxt + "!\nContact Alphoyce if you want permissions.");
 			}
 		} else {
 			msg.channel.sendMessage(cmdTxt + " not recognized as a command!").then((message => message.delete(5000)))
